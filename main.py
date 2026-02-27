@@ -1,5 +1,6 @@
 import os
 import logging
+import subprocess
 import time
 import requests
 from mcstatus import BedrockServer 
@@ -36,6 +37,8 @@ def main():
             logging.error(f"Failed to connect to server {ip}:{port}: {e}. Program will exit.")
             exit(1)
     logging.info(f"No one has been on the server for {time_limit} checks, shutting down the server.")
+    stop_bedrock_container()
+    logging.info("Finished stopping the container, now shutting down the instance.")
     shutdown_instance()
 
 def get_gcp_metadata(path):
@@ -73,6 +76,20 @@ def shutdown_instance():
         logging.info(f"Instance shutdown completed with response: {result}")
     except Exception as e:
         logging.error(f"Error while shutting down instance: {e}")
+
+def stop_bedrock_container():
+    service_name = os.environ.get("SERVICE_NAME")
+    if not service_name:
+        logging.error("SERVICE_NAME environment variable is not set, cannot stop container, and the instance will be stopped directly. Please set SERVICE_NAME to the name of the container in the cloud run instance if you want to stop the container instead of the whole instance.")
+        return
+    try:
+        stop_process = subprocess.check_call(["docker", "compose", "exec","--user", "root", service_name, "send-command", "stop"])
+        logging.info(f"Sent stop command to container {service_name}, waiting for it to stop.")
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Error while sending stop command to container {service_name}: {e}. The instance will be stopped directly.")
+        return
+    time.sleep(180)
+    logging.info(f"Finished waiting for container {service_name} to stop.")
 
 if __name__ == "__main__":
     main()
