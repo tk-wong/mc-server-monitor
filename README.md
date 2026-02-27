@@ -1,7 +1,7 @@
 # Monitoring Minecraft Bedrock Server Activity and Auto-Shutdown Script
-The `main.py` script is designed to monitor the activity of a Minecraft Bedrock server and automatically shut it down if no players have been active for a specified number of checks. The script uses environment variables to configure the server's IP address, port, check intervals, and shutdown timing.
-The script continuously checks for player activity on the server at defined intervals. If it detects that no players have been active for a certain number of consecutive checks, it will wait for a specified amount of time before shutting down the server. This helps to save resources by ensuring that the server is not running unnecessarily when there are no players.
-The script is designed to be run in Google Cloud Platform (GCP) and uses the GCP API to shut down the server instance when necessary. It also includes error handling to manage connection issues and logs important events for monitoring purposes.
+- The python script (`main.py`) is designed to monitor the activity of a Minecraft Bedrock server and automatically shut it down if no players have been active for a specified number of checks. 
+- It continuously checks for player activity on the server at defined intervals. If it detects that no players have been active for a certain number of consecutive checks, it will wait for a specified amount of time before shutting down the server. This helps to save resources by ensuring that the server is not running unnecessarily when there are no players.
+- It is designed to be run in Google Cloud Platform (GCP) and uses the GCP API to shut down the server instance when necessary. It also includes error handling to manage connection issues and logs important events for monitoring purposes.
 ## Configuration
 To configure the script, you need to set the following environment variables in a `.env` file:
 - `SERVER_IP`: The IP address of your Minecraft Bedrock server (default is 127.0.0.1, which is localhost).
