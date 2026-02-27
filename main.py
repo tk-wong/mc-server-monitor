@@ -13,18 +13,19 @@ def main():
     load_dotenv()
     ip = os.environ.get("SERVER_IP", "127.0.0.1")
     port = os.environ.get("SERVER_PORT", "19132")
-    time_limit = int(os.environ.get("TIME_LIMIT", "30"))  # Number of checks with no players before shutdown
+    check_num = int(os.environ.get("CHECK_NUM", "30"))  # Number of checks with no players before shutdown
     check_interval = int(os.environ.get("CHECK_INTERVAL", "60"))  # Time in seconds between checks
+    wait_before_shutdown = int(os.environ.get("WAIT_BEFORE_SHUTDOWN", "60"))  # Time in seconds to wait before shutdown after last check
     no_people_count = 0
-    logging.info(f"Starting server monitor for {ip}:{port} with a time limit of {time_limit} checks.")
-    while no_people_count < time_limit:
+    logging.info(f"Starting server monitor for {ip}:{port} with a time limit of {check_num} checks.")
+    while no_people_count < check_num:
         time.sleep(check_interval)  # Check every check_interval seconds
         try:
             server = BedrockServer.lookup(f"{ip}:{port}")
             status = server.status()
             logging.info(f"The server has {status.players.online} players online and replied in {status.latency} ms")
             if status.players.online == 0:
-                logging.info(f"No one is on the server, incrementing no_people_count. {no_people_count + 1}/{time_limit}")
+                logging.info(f"No one is on the server, incrementing no_people_count. {no_people_count + 1}/{check_num}")
                 no_people_count += 1
             else:
                 if no_people_count > 0:
@@ -35,7 +36,9 @@ def main():
         except Exception as e:
             logging.error(f"Failed to connect to server {ip}:{port}: {e}. Program will exit.")
             exit(1)
-    logging.info(f"No one has been on the server for {time_limit} checks, shutting down the server.")
+    logging.info(f"No one has been on the server for {check_num} checks, waiting {wait_before_shutdown} seconds before shutting down the server.")
+    time.sleep(wait_before_shutdown)
+    logging.info("Shutting down the server now.")
     shutdown_instance()
 
 def get_gcp_metadata(path):
