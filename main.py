@@ -16,6 +16,7 @@ def main():
     check_num = int(os.environ.get("CHECK_NUM", "30"))  # Number of checks with no players before shutdown
     check_interval = int(os.environ.get("CHECK_INTERVAL", "60"))  # Time in seconds between checks
     wait_before_shutdown = int(os.environ.get("WAIT_BEFORE_SHUTDOWN", "60"))  # Time in seconds to wait before shutdown after last check
+
     no_people_count = 0
     logging.info(f"Starting server monitor for {ip}:{port} with a time limit of {check_num} checks.")
     while no_people_count < check_num:
@@ -54,10 +55,20 @@ def get_gcp_metadata(path):
         logging.error(f"Error while getting GCP metadata: {e}")
         return None
 
-def shutdown_instance():
-    project_id = get_gcp_metadata("project/project-id")
-    zone = get_gcp_metadata("instance/zone").split("/")[-1]
-    instance_name = get_gcp_metadata("instance/name")
+def shutdown_instance(): 
+    logging.info("Attempt to get the instance information from environment variables")   
+    project_id = os.environ.get("PROJECT_ID")
+    zone = os.environ.get("ZONE")
+    instance_name = os.environ.get("INSTANCE_NAME")
+    if project_id is None:
+        logging.info("PROJECT_ID not set in environment variables, trying to get it from GCP metadata.")
+        project_id = get_gcp_metadata("project/project-id")
+    if zone is None:
+        logging.info("ZONE not set in environment variables, trying to get it from GCP metadata.")
+        zone = get_gcp_metadata("instance/zone").split("/")[-1]
+    if instance_name is None:
+        logging.info("INSTANCE_NAME not set in environment variables, trying to get it from GCP metadata.")
+        instance_name = get_gcp_metadata("instance/name")
     if not all([project_id, zone, instance_name]):
         logging.error("Missing GCP metadata, cannot shutdown instance.")
         return
