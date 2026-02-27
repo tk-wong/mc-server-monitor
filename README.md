@@ -24,14 +24,18 @@ You can use the provided `.env-template` file to create your own `.env` file wit
 1. Clone the repository and navigate to the project directory.
 2. Create a `.env` file in the project root directory and populate it with the necessary environment variables as described above.
 3. Run the script using different methods:
-    - Run the script using Python:
-        1. Ensure you have the required dependencies installed (e.g., using `pip install .`).
+    1. Run the script using Python:
+        1. Ensure you have the required dependencies installed.
+        ```bash
+        pip install .
+        ```
         (Use `pip install -e .` for development mode to allow for easy updates to the code.)
+      
         2. Execute the script:
         ```bash
         python main.py
         ```
-    - Run the script using [uv](https://docs.astral.sh/uv/), a python package and project manager
+    2. Run the script using [uv](https://docs.astral.sh/uv/), a python package and project manager
         1. Ensure you have uv installed and set up in your environment.
         2. Install the project dependencies:
         ```bash
@@ -41,7 +45,7 @@ You can use the provided `.env-template` file to create your own `.env` file wit
         ```bash
         uv run main.py
         ```
-    - Run the script with Docker:
+    3. Run the script with Docker:
         1. Build the Docker image:
         ```bash
         docker build -t mc-server-monitor .
