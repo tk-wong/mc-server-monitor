@@ -35,7 +35,8 @@ def main():
         except Exception as e:
             logging.error(f"Failed to connect to server {ip}:{port}: {e}. Program will exit.")
             exit(1)
-    logging.info(f"No one has been on the server for {time_limit} checks, shutting down.")
+    logging.info(f"No one has been on the server for {time_limit} checks, shutting down the server.")
+    shutdown_instance()
 
 def get_gcp_metadata(path):
     try:
