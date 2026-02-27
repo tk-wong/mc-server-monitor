@@ -13,7 +13,7 @@ def main():
     load_dotenv()
     ip = os.environ.get("SERVER_IP", "127.0.0.1")
     port = os.environ.get("SERVER_PORT", "19132")
-    time_limit = int(os.environ.get("TIME_LIMIT", "5"))  # Number of checks with no players before shutdown
+    time_limit = int(os.environ.get("TIME_LIMIT", "30"))  # Number of checks with no players before shutdown
     check_interval = int(os.environ.get("CHECK_INTERVAL", "60"))  # Time in seconds between checks
     no_people_count = 0
     logging.info(f"Starting server monitor for {ip}:{port} with a time limit of {time_limit} checks.")
