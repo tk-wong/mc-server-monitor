@@ -11,7 +11,7 @@ To configure the script, you need to set the following environment variables in 
 - `SERVER_PORT`: The port number your Minecraft Bedrock server is running on (default is 19132).
 - `CHECK_NUM`: The number of consecutive checks with no players before the server is shut down (default is 30).
 - `CHECK_INTERVAL`: The time in seconds between each check for player activity (default is 60 seconds).
-- `WAIT_BEFORE_SHUTDOWN`: The time in seconds to wait before shutting down the server after the last check indicates no players (default is 60 seconds).
+- `WAIT_BEFORE_SHUTDOWN`: The time in seconds to wait before shutting down the server after the last check indicates no players (default is 60 seconds). This allows for a grace period in case players return to the server shortly after the last check.
 ### Optional environment variables:
 - `PROJECT_ID`: The GCP project ID where your Minecraft server instance is running. 
 - `ZONE`: The GCP zone where your Minecraft server instance is located.
