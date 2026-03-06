@@ -24,62 +24,67 @@ You can use the provided `.env-template` file to create your own `.env` file wit
 1. Clone the repository and navigate to the project directory.
 2. Create a `.env` file in the project root directory and populate it with the necessary environment variables as described above.
 3. Run the script using different methods:
-    1. Run the script using Python:
-        1. Ensure you have the required dependencies installed.
-        ```bash
-        pip install .
-        ```
-        (Use `pip install -e .` for development mode to allow for easy updates to the code.)
-      
-        2. Execute the script:
-        ```bash
-        python main.py
-        ```
-    2. Run the script using [uv](https://docs.astral.sh/uv/), a python package and project manager
-        1. Ensure you have uv installed and set up in your environment.
-        2. Install the project dependencies:
-        ```bash
-        uv sync
-        ```
-        3. Run the script:
-        ```bash
-        uv run main.py
-        ```
-    3. Run the script with Docker:
-        1. Build the Docker image:
-        ```bash
-        docker build -t mc-server-monitor .
-        ```
-        2. Run the Docker container, ensuring to pass the environment variables:
-        ```bash
-        docker run --rm --env-file .env mc-server-monitor
-        ```
-        Optionally, you can use `docker-compose` to manage the container along with the Minecraft server:
-        1. Create a `docker-compose.yml` file with the following content:
-        ```yaml
-        services:
-            server-monitor:
-                build: <path-to-your-project-directory>
-                env_file: <path-to-your-project-directory>/.env
-                restart: 'unless-stopped'
-                logging:
-                driver: gcplogs # Use Google Cloud Logging driver
-                options:
-                    gcp-log-cmd: "true"
-                depends_on:
-                    <the-minecraft-server-name>
-        ```
 
-        Replace `<path-to-your-project-directory>` with the actual path to your project directory and `<the-minecraft-server-name>` with the name of your Minecraft server service if you are using Docker Compose to manage both the server and the monitor.
+### Run the script using Python:
 
-        2. build the docker image
-        ```bash
-        docker-compose build
-        ```
-        3. Start the container:
-        ```bash
-        docker-compose up -d
-        ```
+1. Ensure you have the required dependencies installed.
+
+```bash
+pip install .
+```
+
+(Use `pip install -e .` for development mode to allow for easy updates to the code.)
+
+2. Execute the script:
+```bash
+python main.py
+```
+
+### Run the script using [uv](https://docs.astral.sh/uv/), a python package and project manager
+1. Ensure you have uv installed and set up in your environment.
+2. Install the project dependencies:
+```bash
+uv sync
+```
+3. Run the script:
+```bash
+uv run main.py
+```
+### Run the script with Docker:
+1. Build the Docker image:
+```bash
+docker build -t mc-server-monitor .
+```
+2. Run the Docker container, ensuring to pass the environment variables:
+```bash
+docker run --rm --env-file .env mc-server-monitor
+```
+Optionally, you can use `docker-compose` to manage the container along with the Minecraft server:
+1. Create a `docker-compose.yml` file with the following content:
+```yaml
+services:
+    server-monitor:
+        build: <path-to-your-project-directory>
+        env_file: <path-to-your-project-directory>/.env
+        restart: 'unless-stopped'
+        logging:
+        driver: gcplogs # Use Google Cloud Logging driver
+        options:
+            gcp-log-cmd: "true"
+        depends_on:
+            <the-minecraft-server-name>
+```
+
+Replace `<path-to-your-project-directory>` with the actual path to your project directory and `<the-minecraft-server-name>` with the name of your Minecraft server service if you are using Docker Compose to manage both the server and the monitor.
+
+2. build the docker image
+```bash
+docker-compose build
+```
+3. Start the container:
+```bash
+docker-compose up -d
+```
 ## Notice
 - It is designed to be run in Google Cloud Platform (GCP) and uses the GCP API to shut down the server instance when necessary. Make sure to set up the appropriate permissions and credentials for the script to access the GCP API. 
 - Currently, it only supports GCP for shutting down the server instance. If you are using a different cloud provider or hosting solution, you will need to modify the shutdown logic in the script to work with your specific environment.
